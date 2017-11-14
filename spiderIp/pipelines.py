@@ -7,7 +7,7 @@
 
 import json
 import codecs
-
+from spiderIp.redisServer import RedisServer
 
 class TutorialPipeline(object):
     def process_item(self, item, spider):
@@ -16,9 +16,11 @@ class TutorialPipeline(object):
 
 class JsonWriterPipeline(object):
     def __init__(self):
-        self.file = codecs.open('items.json', 'wb', encoding='utf-8')
+        self.redis = RedisServer()
+        # self.file = codecs.open('items.json', 'wb', encoding='utf-8')
 
-    def process_item(self, item, spider):
-        line = json.dumps(dict(item)) + "\n"
-        self.file.write(line.decode('unicode_escape'))
-        return item
+    def process_item(self, dt, spider):
+        self.reids.set('ip', dt)
+        # line = json.dumps(dict(item)) + "\n"
+        # self.file.write(line.decode('unicode_escape'))
+        return dt

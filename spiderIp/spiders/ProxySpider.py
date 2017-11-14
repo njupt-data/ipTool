@@ -20,9 +20,10 @@ class ProxySpider(scrapy.Spider):
 
     def parse(self, response):
         i = 0
+        arrs = []
         for tr in response.xpath('//tr'):
             if i > 0:
-                yield {
+                arrs.append({
                     'ip': tr.xpath('.//td[2]/text()').extract_first(),
                     'port': tr.xpath('.//td[3]/text()').extract_first(),
                     'address': unicode.encode(tr.xpath('.//td[4]/text()').extract_first(), "utf-8"),
@@ -31,5 +32,8 @@ class ProxySpider(scrapy.Spider):
                     'linkTime': tr.xpath(".//td[8]//div[@class='bar']/@title").extract_first().encode("utf-8"),
                     'aliveTime': unicode.encode(tr.xpath(".//td[8]//div[@class='bar']/@title").extract_first(), "utf-8"),
                     'verifyTime': tr.xpath(".//td[9]/text()").extract_first().encode("utf-8"),
-                }
+                })
             i = i + 1
+        yield {
+            'ip': arrs
+        }
